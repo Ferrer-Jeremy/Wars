@@ -59,6 +59,10 @@ public class CombatManager : MonoBehaviour
         hud.affichageUnitOver(uniteOver);                                                                   //affiche l'unité survolé
 
         uniteSelection = controls.UniteSelection(allChildrenUnites, positionImagePointeur, uniteSelection);   //on recupere l'unite selectionné  EN COURS !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+        if (uniteSelection != null)
+        {
+            Debug.Log(uniteSelection);
+        }
 
     }
 

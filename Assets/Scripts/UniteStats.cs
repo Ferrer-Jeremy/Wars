@@ -46,6 +46,7 @@ public class UniteStats : MonoBehaviour{
     int attaque2 = 0;
     int typeAttaque1 = 0;
     int typeAttaque2 = 0;
+    bool deplacer = false;      //true si l'unite a ete déplacé
 
 
 
