@@ -30,6 +30,7 @@ public class UniteStats : MonoBehaviour{
     // il faut une valeur de defense pour chaque type d'attaque (rocket, mitraillettes,...)
 
     int move = 3;
+    int moveRestant;
     int ammo = 0;
     int vision = 2;
     int rangeMin = 1;
@@ -46,6 +47,7 @@ public class UniteStats : MonoBehaviour{
     int attaque2 = 0;
     int typeAttaque1 = 0;
     int typeAttaque2 = 0;
+    bool deplacer = false;      //true si l'unite a ete déplacé
 
 
 
@@ -63,8 +65,8 @@ public class UniteStats : MonoBehaviour{
 
     // Use this for initialization
     void Start () {
-	
-	}
+        moveRestant = move;
+    }
 	
 	// Update is called once per frame
 	void Update () {
