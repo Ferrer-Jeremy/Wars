@@ -29,25 +29,25 @@ public class UniteStats : MonoBehaviour{
 
     // il faut une valeur de defense pour chaque type d'attaque (rocket, mitraillettes,...)
 
-    int move = 3;
-    int moveRestant;
-    int ammo = 0;
-    int vision = 2;
-    int rangeMin = 1;
-    int rangeMax = 1;
-    int moveType = 1;
-    int cost = 1000;
-    int defenseCaseActuel = 0;
-    int defenseCaseFuture = 0;
-    int defense1 = 0;
-    int defense1SuivantCase = 0;
-    int defense2 = 0;
-    int defense2SuivantCase = 0;
-    int attaque1 = 0;
-    int attaque2 = 0;
-    int typeAttaque1 = 0;
-    int typeAttaque2 = 0;
-    bool deplacer = false;      //true si l'unite a ete déplacé
+    public int move = 3;
+    public int moveRestant;
+    public int ammo = 0;
+    public int vision = 2;
+    public int rangeMin = 1;
+    public int rangeMax = 1;
+    public string moveType = "pieds";
+    public int cost = 1000;
+    public int defenseCaseActuel = 0;
+    public int defenseCaseFuture = 0;
+    public int defense1 = 0;
+    public int defense1SuivantCase = 0;
+    public int defense2 = 0;
+    public int defense2SuivantCase = 0;
+    public int attaque1 = 0;
+    public int attaque2 = 0;
+    public int typeAttaque1 = 0;
+    public int typeAttaque2 = 0;
+    public bool deplacer = false;      //true si l'unite a ete déplacé
 
 
 

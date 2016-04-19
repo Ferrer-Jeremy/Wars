@@ -64,12 +64,15 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Assets\Scripts\BoardManager.cs" />
+    <Compile Include="Assets\Scripts\CalculRayon.cs" />
     <Compile Include="Assets\Scripts\CombatManager.cs" />
     <Compile Include="Assets\Scripts\ControlCamera.cs" />
     <Compile Include="Assets\Scripts\Controls.cs" />
     <Compile Include="Assets\Scripts\GameManager.cs" />
     <Compile Include="Assets\Scripts\Hud.cs" />
     <Compile Include="Assets\Scripts\Maps.cs" />
+    <Compile Include="Assets\Scripts\StyleCase.cs" />
+    <Compile Include="Assets\Scripts\StyleUnite.cs" />
     <Compile Include="Assets\Scripts\TerrainStats.cs" />
     <Compile Include="Assets\Scripts\UniteStats.cs" />
   </ItemGroup>

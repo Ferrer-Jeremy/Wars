@@ -181,7 +181,7 @@ public class Controls : MonoBehaviour
                 boucle = true;
                 foreach (Transform child in allChildrenTerrain)                                  //on remet la couleur de base de chaque case 
                 {
-                    //on exclu le game objet terrain on on aura une erreure
+                    //on exclu le game objet terrain on on aura une erreur
                     if(child.name != "Terrain")
                     {
                         renderer = child.GetComponent<SpriteRenderer>();
