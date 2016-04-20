@@ -41,4 +41,22 @@ public class StyleCase : MonoBehaviour {
             }
         }
     }
+
+
+    //A FINIR
+
+    public void changeSprite(GameObject gameObject, string sprite)                          //change le sprite du game object
+    {
+        switch (sprite)
+        {
+            case "base":                                                                    //remet le sprite de base
+
+                break;
+
+            case "feu":
+
+                break;
+        }
+
+    }
 }

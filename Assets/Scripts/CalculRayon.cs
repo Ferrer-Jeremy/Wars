@@ -3,7 +3,7 @@ using System.Collections;
 
 public class CalculRayon : MonoBehaviour {
 
-	public void calculRayonDeplacement(GameObject unite, Transform[] allChildrenTerrain, Transform[] allChildrenEquipe, Transform[] allChildrenEquipeEnnemie)    //NE MARCHE QU'AVEC 2 EQUIPES POUR LE MOMENT
+	public Vector2[] calculRayonDeplacement(GameObject unite, Transform[] allChildrenTerrain, Transform[] allChildrenEquipe, Transform[] allChildrenEquipeEnnemie)    //NE MARCHE QU'AVEC 2 EQUIPES POUR LE MOMENT
     {
         int rangeMin = unite.GetComponent<UniteStats>().rangeMin;
         int rangeMax = unite.GetComponent<UniteStats>().rangeMin;
@@ -25,22 +25,25 @@ public class CalculRayon : MonoBehaviour {
         int uniteY = Mathf.RoundToInt(unite.transform.position.y);
 
         int i = 0;
+        int count = 0;
+        float tourX = 0;
+        float tourY = 0;
 
-        bool debut = true;
         bool xPlus = true;
         bool xMoins = true;
         bool yPlus = true;
         bool yMoins = true;
 
-        // tout ca dans le rayon de deplacement de l'unité
-        //on recupere la position de toutes les cases que cette unite ne peut pas traverser
+        
         //et celle qui ralentissent son mouvement
-        switch (moveType)
+
+
+        switch (moveType)                                                                                   //on recupere la position de toutes les cases que cette unite ne peut pas traverser
         {
             case "pieds":
                 foreach (Transform child in allChildrenTerrain)                                         
                 {
-                    //on recupere que les unites ennemis qui peuvent etre dans la zone de deplacement de  unite
+                    
                     if (child.position.x > uniteX - move && 
                         child.position.x < uniteX + move && 
                         child.position.y > uniteY - move && 
@@ -78,7 +81,7 @@ public class CalculRayon : MonoBehaviour {
                 break;
         }
 
-        //on recupere la position de l'equipe ennemi 
+        //on recupere que les unites ennemis qui peuvent etre dans la zone de deplacement de  unite
         i = 0;
         foreach (Transform child in allChildrenEquipeEnnemie)                                         
         {
@@ -114,71 +117,102 @@ public class CalculRayon : MonoBehaviour {
 
 
 
-        //on calcul la zone un move apres l'autre  NE MARCHE PAS
+        //on calcul la zone
         i = 1; 
         zone[0] = positionUnite;
-        for (int moveRestant = move; moveRestant > 0; moveRestant--)
+
+        foreach(Vector2 caseIZ in zone) //case in zone
         {
-            foreach(Vector2 caseIZ in zone) //case in zone
+            if(caseIZ == zero)                                          //on sort des que l'on atteint la valeur zero(0.0) puisque toutes celle qui suivent son a zero aussi  
             {
-                if(caseIZ == zero)
+                break;
+            }
+
+            tourX = zone[0].x - Mathf.Abs(caseIZ.x);
+            tourY = zone[0].y - Mathf.Abs(caseIZ.y);                    //on verifie dans quel tour on est
+
+            if(tourX > move || tourY > move)                            //si on depasse le nombre de deplacement autorisé on sort
+            {              
+                for(int y = count; y < zone.Length; y++)                //cette case et toute les suivantes doivent etre effacé
+                {
+                    zone[y] = zero;
+                }
+                break;
+            }
+  
+            foreach (Vector2 caseI in zoneCaseInterdites )              // on verifie si c'est une case interdite
+            {
+                if (caseI == zero)                                      //on sort des que l'on atteint la valeur zero(0.0) puisque toutes celle qui suivent sont a zero aussi       
                 {
                     break;
                 }
 
-                if(debut == false)
+                if (caseIZ + unX == caseI)                              //si la caseIZ (case de depart) + 1 en x fait partie des cases interdites xplus devient faux et cette case ne sera pas enregistré
                 {
-
+                    xPlus = false;
                 }
-                else
-                {   
-                    foreach (Vector2 caseI in zoneCaseInterdites )
-                    {
-                        if (caseI == zero)
-                        {
-                            break;
-                        }
-
-                        if (caseIZ + unX == caseI)                              //si la caseIZ (case de depart) + 1 en x fait partie des cases interdites xplus devient faux et cette case ne sera pas enregistré
-                        {
-                            xPlus = false;
-                        }
-                        if (caseIZ - unX == caseI)
-                        {
-                            xMoins = false;
-                        }
-                        if (caseIZ + unY == caseI)
-                        {
-                            yPlus = false;
-                        }
-                        if (caseIZ - unY == caseI)
-                        {
-                            yMoins = false;
-                        }
-                    }
-                    if (xPlus)                                                   //on enregistre les cases qui ont été validé
-                    {
-                        zone[i] = caseIZ + unX;
-                        i++;
-                    }
-                    if (xMoins)
-                    {
-                        zone[i] = caseIZ - unX;
-                        i++;
-                    }
-                    if (yPlus)
-                    {
-                        zone[i] = caseIZ + unY;
-                        i++;
-                    }
-                    if (yMoins)
-                    {
-                        zone[i] = caseIZ - unY;
-                        i++;
-                    }
-                    debut = false;
+                if (caseIZ - unX == caseI)
+                {
+                    xMoins = false;
+                }
+                if (caseIZ + unY == caseI)
+                {
+                    yPlus = false;
+                }
+                if (caseIZ - unY == caseI)
+                {
+                    yMoins = false;
                 }
             }
-        }
+            foreach (Vector2 caseIZbis in zone)                         //on verifie si la case a deja ete ajouté
+            {
+                if (caseIZbis == zero)                                  //on sort des que l'on atteint la valeur zero(0.0) puisque toutes celle qui suivent sont a zero aussi
+                {
+                    break;
+                }
+
+                if (caseIZ + unX == caseIZbis)                          //si la caseIZ + 1 en x fait partie des cases deja ajouté, xplus devient faux et cette case ne sera pas enregistré
+                {
+                    xPlus = false;
+                }
+                if (caseIZ - unX == caseIZbis)
+                {
+                    xMoins = false;
+                }
+                if (caseIZ + unY == caseIZbis)
+                {
+                    yPlus = false;
+                }
+                if (caseIZ - unY == caseIZbis)
+                {
+                    yMoins = false;
+                }
+            }
+
+            
+
+            if (xPlus)                                                   //on enregistre les cases qui ont été validé
+            { 
+                zone[i] = caseIZ + unX;
+                i++;
+            }
+            if (xMoins)
+            {
+                zone[i] = caseIZ - unX;
+                i++;
+            }
+            if (yPlus)
+            {
+                zone[i] = caseIZ + unY;
+                i++;
+            }
+            if (yMoins)
+            {
+                zone[i] = caseIZ - unY;
+                i++;
+            }
+            count++;
+        }        
+    return zone;
     }
 }
