@@ -71,6 +71,7 @@
     <Compile Include="Assets\Scripts\GameManager.cs" />
     <Compile Include="Assets\Scripts\Hud.cs" />
     <Compile Include="Assets\Scripts\Maps.cs" />
+    <Compile Include="Assets\Scripts\Pointeur.cs" />
     <Compile Include="Assets\Scripts\StyleCase.cs" />
     <Compile Include="Assets\Scripts\StyleUnite.cs" />
     <Compile Include="Assets\Scripts\TerrainStats.cs" />

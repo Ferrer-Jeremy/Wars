@@ -29,6 +29,7 @@ public class UniteStats : MonoBehaviour{
 
     // il faut une valeur de defense pour chaque type d'attaque (rocket, mitraillettes,...)
 
+    public int vie = 100;
     public int move = 3;
     public int moveRestant;
     public int ammo = 0;

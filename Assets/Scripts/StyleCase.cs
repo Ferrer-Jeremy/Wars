@@ -6,13 +6,13 @@ public class StyleCase : MonoBehaviour {
     private SpriteRenderer imageCase;
     Color couleurBase = new Color(1f, 1f, 1f, 1f);                                          // couleur blanc transparent
 
-    public void paintCase(Transform[] allChildrenTerrain, int[,] zone, Color color)         // met un filtre couleur sur une zone de cases
+    public void paintCase(Transform[] allChildrenTerrain, Vector2[] zone, Color color)      // met un filtre couleur sur une zone de cases
     {
         for (int j = 0; j < zone.GetLength(0); j++)    
         {
-            if (zone[j, 0] != 0 || zone[j, 1] != 0)                                         //test pour afficher les coordonnées differentes de 0,0
+            if (zone[j].x != 0 || zone[j].y != 0)                                           //test pour afficher les coordonnées differentes de 0,0
             {      
-                Vector3 position = new Vector3(zone[j, 0], zone[j, 1], 0);
+                Vector3 position = new Vector3(zone[j].x, zone[j].y, 0);
                 foreach (Transform child in allChildrenTerrain)                             //on fait une boucle avec chaque transform
                 {
                     if (child.position == position)                                       
@@ -25,7 +25,7 @@ public class StyleCase : MonoBehaviour {
         }
     }
 
-    public void resetPaintCase(Transform[] allChildrenTerrain, int[,] zone)                 // enleve tous les filtres couleur sur une zone de cases ou une seule case
+    public void resetPaintCase(Transform[] allChildrenTerrain, Vector2[] zone)                 // enleve tous les filtres couleur sur une zone de cases ou une seule case
     {
         paintCase(allChildrenTerrain, zone, couleurBase);
     }

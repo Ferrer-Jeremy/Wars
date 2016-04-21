@@ -7,15 +7,15 @@ public class CalculRayon : MonoBehaviour {
     {
         int rangeMin = unite.GetComponent<UniteStats>().rangeMin;
         int rangeMax = unite.GetComponent<UniteStats>().rangeMin;
-        int move = unite.GetComponent<UniteStats>().move;
+        int move = unite.GetComponent<UniteStats>().moveRestant;
         string moveType = unite.GetComponent<UniteStats>().moveType;
 
-        Vector2 positionUnite = unite.transform.position;                                                     // le vector3 va dans le v2 z est "effacé"
+        Vector2 positionUnite = unite.transform.position;                                                   // le vector3 va dans le v2 z est "effacé"
         Vector2 zero = new Vector2(0,0);
         Vector2 unX = new Vector2(1, 0);
         Vector2 unY = new Vector2(0, 1);
 
-        Vector2[] zone = new Vector2[1000];                                                              //ATTENTION !!!!!!!!!!!!!!    LIMTE LA TAILLE DE LA ZONE A 100 CASES
+        Vector2[] zone = new Vector2[1000];                                                                 //ATTENTION !!!!!!!!!!!!!!    LIMTE LA TAILLE DE LA ZONE A 100 CASES
         Vector2[] zoneCaseInterdites = new Vector2[100];
         Vector2[] zoneCaseRalentit = new Vector2[100];
         Vector2[] zoneUniteEnnemi = new Vector2[100];
@@ -25,17 +25,14 @@ public class CalculRayon : MonoBehaviour {
         int uniteY = Mathf.RoundToInt(unite.transform.position.y);
 
         int i = 0;
-        int count = 0;
-        float tourX = 0;
-        float tourY = 0;
 
         bool xPlus = true;
         bool xMoins = true;
         bool yPlus = true;
         bool yMoins = true;
 
-        
-        //et celle qui ralentissent son mouvement
+        // la vision limite la zone de recherche pour les unités ennemis
+        //et celle qui ralentissent son mouvement A FAIRE
 
 
         switch (moveType)                                                                                   //on recupere la position de toutes les cases que cette unite ne peut pas traverser
@@ -52,13 +49,13 @@ public class CalculRayon : MonoBehaviour {
                         if (child.tag == "Mer" || child.tag == "Recif")                                     //utiliser des tags est plus rapide et use moins de ressources
                         {
                             zoneCaseInterdites[i] = child.position;
+                            i++;
                         }
                         if (child.tag == "Montagne" || child.tag == "Riviere")                              //utiliser des tags est plus rapide et use moins de ressources
                         {
-                            zoneCaseRalentit[i] = child.position;
+                            //zoneCaseRalentit[i] = child.position;
                         }
-                    }
-                    i++;
+                    }  
                 }
                 break;
             case "roues":
@@ -83,16 +80,19 @@ public class CalculRayon : MonoBehaviour {
 
         //on recupere que les unites ennemis qui peuvent etre dans la zone de deplacement de  unite
         i = 0;
-        foreach (Transform child in allChildrenEquipeEnnemie)                                         
+        if (allChildrenEquipeEnnemie != null)
         {
-            if (child.position.x > uniteX - move &&
-                child.position.x < uniteX + move &&
-                child.position.y > uniteY - move &&
-                child.position.y < uniteY + move)
+            foreach (Transform child in allChildrenEquipeEnnemie)
             {
-                zoneUniteEnnemi[i] = child.position;
+                if (child.position.x > uniteX - move &&
+                    child.position.x < uniteX + move &&
+                    child.position.y > uniteY - move &&
+                    child.position.y < uniteY + move)
+                {
+                    zoneUniteEnnemi[i] = child.position;
+                }
+                i++;
             }
-            i++;
         }
 
         //on recupere la position de notre equipe, on ne peut pas s'areter sur une unite de notre equipe
@@ -116,7 +116,6 @@ public class CalculRayon : MonoBehaviour {
 
 
 
-
         //on calcul la zone
         i = 1; 
         zone[0] = positionUnite;
@@ -125,18 +124,6 @@ public class CalculRayon : MonoBehaviour {
         {
             if(caseIZ == zero)                                          //on sort des que l'on atteint la valeur zero(0.0) puisque toutes celle qui suivent son a zero aussi  
             {
-                break;
-            }
-
-            tourX = zone[0].x - Mathf.Abs(caseIZ.x);
-            tourY = zone[0].y - Mathf.Abs(caseIZ.y);                    //on verifie dans quel tour on est
-
-            if(tourX > move || tourY > move)                            //si on depasse le nombre de deplacement autorisé on sort
-            {              
-                for(int y = count; y < zone.Length; y++)                //cette case et toute les suivantes doivent etre effacé
-                {
-                    zone[y] = zero;
-                }
                 break;
             }
   
@@ -189,7 +176,23 @@ public class CalculRayon : MonoBehaviour {
                 }
             }
 
-            
+            if (Mathf.Abs(zone[0].y - caseIZ.y) + Mathf.Abs(zone[0].x - (caseIZ + unX).x) > move)         //on verifie si la case depasse le deplacement maximal (move)
+            {
+                xPlus = false;
+            }
+            if (Mathf.Abs(zone[0].y - caseIZ.y) + Mathf.Abs(zone[0].x - (caseIZ - unX).x) > move)
+            {
+                xMoins = false;
+            }
+            if (Mathf.Abs(zone[0].y - (caseIZ + unY).y) + Mathf.Abs(zone[0].x - caseIZ.x) > move)
+            {
+                yPlus = false;
+            }
+            if (Mathf.Abs(zone[0].y - (caseIZ - unY).y) + Mathf.Abs(zone[0].x - caseIZ.x) > move)
+            {
+                yMoins = false;
+            }
+
 
             if (xPlus)                                                   //on enregistre les cases qui ont été validé
             { 
@@ -211,7 +214,10 @@ public class CalculRayon : MonoBehaviour {
                 zone[i] = caseIZ - unY;
                 i++;
             }
-            count++;
+            xPlus = true;
+            xMoins = true;
+            yPlus = true;
+            yMoins = true;
         }        
     return zone;
     }
