@@ -18,19 +18,28 @@ public class CombatManager : MonoBehaviour
     Transform[] allChildrenTerrain;
     Transform[] allChildrenUnites;
 
-    Color attackZone = new Color(0.5f, 0.5f, 0.5f, 1f); // couleur grise
+    Color colorAttackZone = new Color(1f, 0f, 0f, 1f); // couleur grise
+    Color colorDeplacement = new Color(0.5f, 0.5f, 0.5f, 1f); // couleur grise
     Color colorUniteSelec = new Color(1f, 0.92f, 0.016f, 1f); // couleur jaune
 
     Vector2[] zone;
+    Vector2[] zoneUniteSelection;
+    Vector2[] chemin;
 
     Vector3 positionImagePointeur;
 
     GameObject uniteOver;
     GameObject uniteSelection;
 
+    bool deplacementEnCours;
+
     void Awake()
     { 
         zone = new Vector2[100];
+        zoneUniteSelection = new Vector2[100];
+        chemin = new Vector2[50];
+
+        deplacementEnCours = false;
 
         //on recupere les scripts 
         hud = GetComponent<Hud>();
@@ -57,7 +66,7 @@ public class CombatManager : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        positionImagePointeur = pointeur.transform.position;
+        positionImagePointeur = pointeur.transform.position;                                                // on recupere la position de la souris
 
         hud.affichageCaseHud(allChildrenTerrain, terrainStats, positionImagePointeur);                      //affiche la defense de la case pointé
 
@@ -65,50 +74,67 @@ public class CombatManager : MonoBehaviour
 
         hud.affichageUnitOver(uniteOver);                                                                   //affiche l'unité survolé
 
-
-        if (uniteSelection == null)                                                                         //si une unité n'est pas selec
+        if (Input.GetKeyDown("mouse 1"))                                                                    //clique droit affiche la zone de deplacement/attack
         {
-            if (Input.GetKeyDown("mouse 0"))                                                                //selectionne l'unite sur laquelle on clique
-            {
-                if (uniteOver != null)
-                {
-                    uniteSelection = uniteOver;                                                             //on recupere l'unite selectionné ou désélectionne
-                    styleUnite.paintUnite(uniteSelection, colorUniteSelec);  
-                }
-            }
-        }
-        else
-        {
-            if (uniteSelection.GetComponent<UniteStats>().moveRestant > 0)
+            if (uniteOver != null && (uniteOver != uniteSelection || uniteSelection == null))
             {
                 zone = calculRayon.calculRayonDeplacement(uniteOver, allChildrenTerrain, allChildrenUnites, null);
-                styleCase.paintCase(allChildrenTerrain, zone, attackZone);
-
-
-            }
-            //afficher stats abregé de l'unite selec
-        }
-
-
-        if (Input.GetKeyDown("space"))                                                                      //deselectionne l'unite en appuyant sur espace
-        {
-            styleUnite.resetPaintUnite(uniteSelection);
-            uniteSelection = null;
-        }
-
-        /*if (Input.GetKeyDown("mouse 1"))                                                                    //clique droit affiche la zone de deplacement/attack
-        {
-            if (uniteOver != null)               
-            {
-                zone = calculRayon.calculRayonDeplacement(uniteOver, allChildrenTerrain, allChildrenUnites, null);
-                styleCase.paintCase(allChildrenTerrain, zone, attackZone);
+                styleCase.paintCase(allChildrenTerrain, zone, colorAttackZone);
             }
             else
             {
                 styleCase.resetAllPaintCase(allChildrenTerrain);
             }
+        }
+
+        if (deplacementEnCours)
+        {
+            chemin = controls.cheminUnite(uniteSelection, zoneUniteSelection, chemin, positionImagePointeur);                                            //pour definir le chemin
+            controls.affichageChemin(chemin);                                                               //affiche le chemin    
+                
+            if (Input.GetKeyDown("mouse 1") && (uniteOver == null || uniteOver == uniteSelection) && chemin[0] == new Vector2(0,0))                                                                  
+            {
+                deplacementEnCours = false;
+                styleUnite.resetPaintUnite(uniteSelection);
+                uniteSelection = null;
+                for (int j = 0; j < zoneUniteSelection.GetLength(0); j++)
+                {
+                    zoneUniteSelection[j] = new Vector2(0, 0);
+                }
+            }
+
+            if (Input.GetKeyDown("mouse 0"))
+            {
+
+            }
+        }
+        else
+        {
+            if (uniteSelection == null)                                                                         //si une unité n'est pas selec
+            {
+                if (Input.GetKeyDown("mouse 0"))                                                                //selectionne l'unite sur laquelle on clique
+                {
+                    if (uniteOver != null)
+                    {
+                        uniteSelection = uniteOver;                                                             //on recupere l'unite selectionné ou désélectionne
+                        styleUnite.paintUnite(uniteSelection, colorUniteSelec);
+                        zoneUniteSelection = calculRayon.calculRayonDeplacement(uniteSelection, allChildrenTerrain, allChildrenUnites, null);
+                        styleCase.paintCase(allChildrenTerrain, zoneUniteSelection, colorDeplacement);
+                    }
+                }
+            }
+            else                                                                                                //sinon
+            {
+                deplacementEnCours = true;
+                //afficher stats abregé de l'unite selec
+            }
+        }
+
+        /*if (Input.GetKeyDown("space"))                                                                      //deselectionne l'unite en appuyant sur espace
+        {
+            styleUnite.resetPaintUnite(uniteSelection);
+            uniteSelection = null;
         }*/
 
-        controls.deplacementUnite(uniteSelection, pointeur.transform.position);                                      //deplace l'unite
     }
 }

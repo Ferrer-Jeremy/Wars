@@ -18,7 +18,14 @@ public class StyleCase : MonoBehaviour {
                     if (child.position == position)                                       
                     {
                         imageCase = child.GetComponent<SpriteRenderer>();                   //A CHANGER les appels get... demandent beacoup de ressources
-                        imageCase.color = color;
+                        if(imageCase.color != couleurBase)                                  //si il y a deja une couleur sur la case on ajoute les 2
+                        {
+                            imageCase.color = imageCase.color + color;
+                        }
+                        else                                                                //sinon on met seulement la couleur choisit
+                        {
+                            imageCase.color = color;
+                        }
                     }
                 }
             }

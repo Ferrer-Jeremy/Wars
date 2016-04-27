@@ -31,7 +31,7 @@ public class UniteStats : MonoBehaviour{
 
     public int vie = 100;
     public int move = 3;
-    public int moveRestant;
+    public int moveRestant = 3;
     public int ammo = 0;
     public int vision = 2;
     public int rangeMin = 1;
@@ -61,16 +61,4 @@ public class UniteStats : MonoBehaviour{
 
     }
 
-
-
-
-    // Use this for initialization
-    void Start () {
-        moveRestant = move;
-    }
-	
-	// Update is called once per frame
-	void Update () {
-	
-	}
 }
