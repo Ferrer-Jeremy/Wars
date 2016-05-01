@@ -32,6 +32,9 @@ public class CombatManager : MonoBehaviour
     GameObject uniteSelection;
 
     bool deplacementEnCours;
+	bool animationDeplacement;
+	
+	int compteurChemin;
 
     void Awake()
     { 
@@ -40,6 +43,9 @@ public class CombatManager : MonoBehaviour
         chemin = new Vector2[50];
 
         deplacementEnCours = false;
+		animationDeplacement = false;
+		
+		compteurChemin = 0;
 
         //on recupere les scripts 
         hud = GetComponent<Hud>();
@@ -92,20 +98,21 @@ public class CombatManager : MonoBehaviour
             chemin = controls.cheminUnite(uniteSelection, zoneUniteSelection, chemin, positionImagePointeur);                                            //pour definir le chemin
             controls.affichageChemin(chemin);                                                               //affiche le chemin    
                 
-            if (Input.GetKeyDown("mouse 1") && (uniteOver == null || uniteOver == uniteSelection) && chemin[0] == new Vector2(0,0))                                                                  
+            if (Input.GetKeyDown("mouse 1") && (uniteOver == null || uniteOver == uniteSelection) && chemin[0] == new Vector2(0,0))             //efface la selection                                                     
             {
                 deplacementEnCours = false;
                 styleUnite.resetPaintUnite(uniteSelection);
                 uniteSelection = null;
-                for (int j = 0; j < zoneUniteSelection.GetLength(0); j++)
-                {
-                    zoneUniteSelection[j] = new Vector2(0, 0);
-                }
+                controls.resetArrayVector2(zoneUniteSelection);
             }
 
             if (Input.GetKeyDown("mouse 0"))
             {
-
+				animationDeplacement = controls.deplacementPossible(chemin, allChildrenUnites);							//verifie que le deplacement soit possible
+				if(animationDeplacement)
+				{
+					compteurChemin = 1;
+				}
             }
         }
         else
@@ -137,4 +144,12 @@ public class CombatManager : MonoBehaviour
         }*/
 
     }
+	
+	void FixedUpdate()
+	{
+		if(compteurChemin != 0)														//deplace l'unité
+		{
+			compteurChemin = controls.deplacement(uniteSelection, chemin, compteurChemin);
+		}
+	}
 }
