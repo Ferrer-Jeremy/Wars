@@ -3,8 +3,19 @@ using System.Collections;
 
 public class ListeCases : MonoBehaviour {
 
-	// Use this for initialization
-	void Start () {
+
+    public GameObject eau;
+    public GameObject plaine;
+    public GameObject foret;
+    public GameObject montagne;
+
+
+
+
+
+
+    // Use this for initialization
+    void Start () {
 	
 	}
 	

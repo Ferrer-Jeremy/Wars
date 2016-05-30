@@ -3,6 +3,8 @@ using System.Collections;
 
 public class Pointeur : MonoBehaviour {
 	
+    public Transform[] terrain;
+
 	// Update is called once per frame
 	void Update ()
     {
