@@ -17,10 +17,10 @@ public class UI : MonoBehaviour {
 	
 	}
 
-    public void positionPanel()
+    public void positionPanel(bool panelHaut)
     {
         Debug.Log("Button was pressed");
-        if (positionListeCases)
+        if (panelHaut)
         {
             positionListeCases = false;
         }
