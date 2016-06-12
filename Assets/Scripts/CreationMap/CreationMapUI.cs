@@ -4,20 +4,14 @@ using UnityEngine.UI;
 
 public class CreationMapUI : MonoBehaviour {
 
-    public GameObject liste_Terrain;
+    //script
+    private ListeCases listeCases;
+    public GameObject gameManager;
 
-    public GameObject eau;
-    public GameObject plaine;
-    public GameObject foret;
-    public GameObject montagne;
-
-    GameObject[] listeGameObject;
-
-    public GameObject prefab;
+    public GameObject prefab; // une cases exemple sur laquelle on va ce baser   asset / prefabs / creaton map
     Image prefabImage;
     string prefabText;
     Vector3 prefabPosition;
-    Quaternion prefabQuaternion;
 
     Sprite imageGO;
     string textGO;
@@ -25,15 +19,18 @@ public class CreationMapUI : MonoBehaviour {
 
     void Awake()
     {
-        GameObject[] listeGameObject = { eau, plaine, foret, montagne };
+        //recuperation des tiles (toutes les cases) du script liste cases sur le game manager
+        listeCases = gameManager.GetComponent<ListeCases>();
+        GameObject[] listeGameObject = listeCases.getTiles();
+
+        //
         prefabImage = prefab.GetComponentInChildren<Image>();
         prefabText = prefab.GetComponentInChildren<Text>().text;
         prefabPosition = new Vector3(30, 0, 0);
-        prefabQuaternion = new Quaternion(0, 0, 0, 0);
 
         addPosition = new Vector3(50, 0, 0);
 
-        for (int x = 0; x < listeGameObject.Length; x++)            //affiche les gameObject a la suite
+       for (int x = 0; x < listeGameObject.Length; x++)            //affiche les gameObject a la suite
         {
             if(x!=0)
             {
@@ -47,16 +44,11 @@ public class CreationMapUI : MonoBehaviour {
             GameObject modele = Instantiate(prefab, prefabPosition, Quaternion.identity) as GameObject;       //crée des clones
             modele.transform.SetParent(this.gameObject.transform);                                              //les met en enfants de liste_cases
             modele.transform.localScale = new Vector3(1, 1, 1);                                                 //les met a la bonne taille
-
-
-
         }
     }
 
     // Use this for initialization
     void Start () {
-	    
-
 
 	}
 	

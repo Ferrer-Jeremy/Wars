@@ -3,18 +3,33 @@ using System.Collections;
 
 public class ControlCamera : MonoBehaviour
 {
-    public float speedCamera = 0.25f;
-    public float distanceCamera = 5; //on met en public pour pouvoir le changer dans l'editeur
+    private float speedCamera = 0.25f;
+    private float distanceCamera = 5; //on met en public pour pouvoir le changer dans l'editeur
     new Camera camera;
     Vector3 cameraPosition;
     Vector3 cameraPostionfuture;
 
+    //pour recuperer la taille de la carte
+    public GameObject gameManager; 
+    private CreationMap creationMap; // le script
+    private int largeur;
+    private int longeur;
+    private int debutLargeur;
+    private int debutLongeur;
+
     // Use this for initialization
     void Start()
     {
-        cameraPosition = new Vector3(30, 30, -10);
         camera = GetComponent<Camera>();
-        GetComponent<Transform>().position = cameraPosition;
+        cameraPosition = new Vector3(110, 110, -10);
+
+        //pour recuperer la taille de la carte
+        creationMap = gameManager.GetComponent<CreationMap>();
+        largeur = creationMap.getLargeur();
+        longeur = creationMap.getLongeur();
+        debutLargeur = creationMap.getDebutLargeur();
+        debutLongeur = creationMap.getDebutLongeur();
+
     }
 
     // Update is called once per frame
@@ -29,14 +44,23 @@ public class ControlCamera : MonoBehaviour
 
         camera.orthographicSize = distanceCamera;  //on defini la distance de la camera
 
-
         float moveX = Input.GetAxis("Horizontal") * speedCamera; //touches gauche droite * la vitesse choisi
         float moveY = Input.GetAxis("Vertical") * speedCamera;   //touches haut bas * la vitesse choisi
         cameraPostionfuture = new Vector3(moveX, moveY, 0);//on crée un vector 2 dans lequel on met les input 
-        cameraPosition = GetComponent<Transform>().position;//on recupere la position de la camera
+        
         cameraPosition = cameraPosition + cameraPostionfuture;//on ajoute a la position de la camera le deplacement
+       
 
-        camera.transform.position = cameraPosition;//on met a jour la camera la camera
+        //corection de la position de la camera pour ne pas qu'elle sorte de la carte
+        if (cameraPosition.x > largeur + debutLargeur)
+            cameraPosition.x = largeur + debutLargeur;
+        if (cameraPosition.x < debutLargeur)
+            cameraPosition.x = debutLargeur;
+        if (cameraPosition.y > longeur + debutLongeur)
+            cameraPosition.y = longeur + debutLongeur;
+        if (cameraPosition.y < debutLongeur)
+            cameraPosition.y = debutLongeur;
+
+        camera.transform.position = cameraPosition;//on met a jour la camera camera
     }
-
 }

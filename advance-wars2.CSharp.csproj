@@ -68,6 +68,11 @@
     <Compile Include="Assets\Scripts\CombatManager.cs" />
     <Compile Include="Assets\Scripts\ControlCamera.cs" />
     <Compile Include="Assets\Scripts\Controls.cs" />
+    <Compile Include="Assets\Scripts\CreationMap\CreationMap.cs" />
+    <Compile Include="Assets\Scripts\CreationMap\CreationMapUI.cs" />
+    <Compile Include="Assets\Scripts\CreationMap\GenerationMap.cs" />
+    <Compile Include="Assets\Scripts\CreationMap\ListeCases.cs" />
+    <Compile Include="Assets\Scripts\CreationMap\UI.cs" />
     <Compile Include="Assets\Scripts\GameManager.cs" />
     <Compile Include="Assets\Scripts\Hud.cs" />
     <Compile Include="Assets\Scripts\Maps.cs" />
