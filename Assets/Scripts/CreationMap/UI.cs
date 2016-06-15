@@ -1,6 +1,8 @@
 ﻿using UnityEngine;
 using System.Collections;
+using System.Collections.Generic;
 using UnityEngine.UI;
+using MiniJSON;
 
 public class UI : MonoBehaviour {
 
@@ -34,6 +36,7 @@ public class UI : MonoBehaviour {
         longeurSave = creationMap.getLongeur();
         debutLargeur = creationMap.getDebutLargeur();
         debutLongeur = creationMap.getDebutLongeur();
+
     }
 	
 	// Update is called once per frame
@@ -96,25 +99,18 @@ public class UI : MonoBehaviour {
         Transform[] allChildrenTerrain;
         allChildrenTerrain = terrain.GetComponentsInChildren<Transform>();
 
-        for(int x = debutLargeur; x <= largeurSave + debutLargeur; x++)
-        {
-            for(int y = debutLongeur; x <= longeurSave + debutLongeur; y++)
-            {
-                foreach(Transform boop in allChildrenTerrain)
-                {
-                    if(boop.position.x == x && boop.position.y == y)
-                    {
-                        cases[x, y] = boop.tag; //a changer pour recuperer le bon type de case exactement
-                    }
-                }
-            }
+        
+        foreach(Transform boop in allChildrenTerrain)
+        {  
+            cases[(int)boop.position.x, (int)boop.position.y] = boop.tag; //a changer pour recuperer le bon type de case exactement
         }
 
-
-        MapJson mapJson = new MapJson(nomMap.text, largeurSave, longeurSave, cases);
-
-        //nomMap.text
-        Debug.Log(nomMap.text);
+        MapJson mapJson = gameObject.AddComponent<MapJson>();
+        mapJson.initObject(nomMap.text, largeurSave, longeurSave, cases);
+        Debug.Log(mapJson.cases[101,101]);
+        string stringJson = Json.Serialize(mapJson.cases);
+        Debug.Log("serialized: " + stringJson);
+        //mapJson.enregistrer();
     }
 
     public void loadMap()//fait apparaitre et disparaitre la fenetre charger a l'aide du bouton charger et charger non

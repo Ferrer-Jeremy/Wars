@@ -3,29 +3,30 @@ using System.Collections;
 using System;
 using System.IO;
 
+
 [Serializable]
 public class MapJson : MonoBehaviour
 {
-    private string nom;
-    private int largeur;
-    private int longeur;
-    private string[,] cases;
-    private string path = @"c:\temp\";
+    public string nom;
+    public int largeur;
+    public int longeur;
+    public string[,] cases;
+    private string path = @"c:\temp\"; 
 
-    public MapJson (string nom, int largeur, int longeur, string[,] cases)
+    public void initObject (string nom, int largeur, int longeur, string[,] cases)
     {
         this.nom = nom;
         this.largeur = largeur;
         this.longeur = longeur;
-        this.cases = cases;
+        this.cases = cases;     
     }
 
-    public void enregistrer(MapJson mapJson)
+    public void enregistrer(string s)
     {
-        string json = JsonUtility.ToJson(mapJson);
-        using (StreamWriter sw = File.CreateText(path+nom+".json"))
+        using (StreamWriter sw = File.CreateText(this.path+this.nom+".json"))
         {
-            sw.WriteLine(json);
+            sw.WriteLine(s);
+            Debug.Log("enregistrement reussi");
         }
     }
 
